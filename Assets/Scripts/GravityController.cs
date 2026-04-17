@@ -8,9 +8,9 @@ public class GravityController : MonoBehaviour
     public float gravity;
     public bool grounded;
 
-    CharacterController controller;
+    protected CharacterController controller;
 
-    Vector3 velocity;
+    protected Vector3 _velocity;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -21,21 +21,12 @@ public class GravityController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (!grounded)
-        {
-            velocity.y += gravity;
-
-            controller.Move(velocity * Time.deltaTime);
-        }
+        MoveController();
     }
 
-    private void OnCollisionEnter(Collision collision)
+    protected virtual void MoveController()
     {
-        grounded = true;
-        velocity = Vector3.zero;
-    }
-    private void OnCollisionExit(Collision collision)
-    {
-        grounded = false;
+        if (!controller.isGrounded) _velocity.y += gravity;
+        if (_velocity != Vector3.zero) controller.Move(_velocity * Time.deltaTime);
     }
 }
